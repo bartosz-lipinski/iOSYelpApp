@@ -14,6 +14,7 @@
 		650B520A19CB9A9800319CF6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 650B520819CB9A9800319CF6 /* LaunchScreen.xib */; };
 		650B521619CB9A9800319CF6 /* YelpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650B521519CB9A9800319CF6 /* YelpTests.swift */; };
 		651D85EA19CBA00500CB5BB7 /* YelpOAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651D85E919CBA00500CB5BB7 /* YelpOAuthClient.swift */; };
+		6592075B19CCFB5A00430025 /* BusinessListingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6592075A19CCFB5A00430025 /* BusinessListingTableViewCell.swift */; };
 		D1B89D9201C647CD8FAB197D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E6EA84F4D7CE4E74B14A2983 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		650B521519CB9A9800319CF6 /* YelpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpTests.swift; sourceTree = "<group>"; };
 		651D85E619CB9CC700CB5BB7 /* Yelp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Yelp-Bridging-Header.h"; sourceTree = "<group>"; };
 		651D85E919CBA00500CB5BB7 /* YelpOAuthClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpOAuthClient.swift; sourceTree = "<group>"; };
+		6592075A19CCFB5A00430025 /* BusinessListingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusinessListingTableViewCell.swift; sourceTree = "<group>"; };
 		E6EA84F4D7CE4E74B14A2983 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -86,14 +88,15 @@
 		650B51FC19CB9A9700319CF6 /* Yelp */ = {
 			isa = PBXGroup;
 			children = (
+				650B51FD19CB9A9700319CF6 /* Supporting Files */,
 				651D85EB19CBAC1D00CB5BB7 /* View Controllers */,
 				650B51FF19CB9A9700319CF6 /* AppDelegate.swift */,
-				650B520319CB9A9800319CF6 /* Main.storyboard */,
-				650B520619CB9A9800319CF6 /* Images.xcassets */,
-				650B520819CB9A9800319CF6 /* LaunchScreen.xib */,
-				650B51FD19CB9A9700319CF6 /* Supporting Files */,
-				651D85E619CB9CC700CB5BB7 /* Yelp-Bridging-Header.h */,
 				651D85E919CBA00500CB5BB7 /* YelpOAuthClient.swift */,
+				6592075A19CCFB5A00430025 /* BusinessListingTableViewCell.swift */,
+				651D85E619CB9CC700CB5BB7 /* Yelp-Bridging-Header.h */,
+				650B520319CB9A9800319CF6 /* Main.storyboard */,
+				650B520819CB9A9800319CF6 /* LaunchScreen.xib */,
+				650B520619CB9A9800319CF6 /* Images.xcassets */,
 			);
 			path = Yelp;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 			files = (
 				651D85EA19CBA00500CB5BB7 /* YelpOAuthClient.swift in Sources */,
 				650B520219CB9A9700319CF6 /* MainViewController.swift in Sources */,
+				6592075B19CCFB5A00430025 /* BusinessListingTableViewCell.swift in Sources */,
 				650B520019CB9A9700319CF6 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -399,7 +403,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5FC4AFC0D0474846A8F25B40 /* Pods.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Yelp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -413,7 +416,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5FC4AFC0D0474846A8F25B40 /* Pods.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Yelp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
