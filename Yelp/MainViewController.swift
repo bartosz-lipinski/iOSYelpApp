@@ -17,15 +17,18 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     var client: YelpOAuthClient!
 
     var businesses: [NSDictionary] = []
+    var query = "Restaurants"
+    var offset = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        MMProgressHUD.setPresentationStyle(MMProgressHUDPresentationStyle.None)
+
         tableView.delegate = self
         tableView.dataSource = self
 
-        searchDisplayController?.displaysSearchBarInNavigationBar = true
-        navigationItem.rightBarButtonItem = filterBtn
+        navigationItem.titleView = searchBar
 
         // Initialize the Yelp client
         client = YelpOAuthClient(
@@ -34,34 +37,24 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             accessToken:    "6nlqBaBh87XC9rV606vGnpQzuaH1VzQi",
             accessSecret:   "YbzRsj464YqRPCzStY2gpnOPOVQ")
 
-        // This is just an example...
-        client.search("Restaurant") {
-            (response: AnyObject!, error: NSError!) -> Void in
-
-            if error == nil {
-                var object = response as NSDictionary
-                self.businesses = object["businesses"] as [NSDictionary]
-                self.tableView.reloadData()
-            } else {
-                // TODO: handle error in the UI...
-                println(error)
-            }
-        }
+        searchBar.text = query
+        fetchBusinessListing()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-/*
+
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 133
+        return 90
     }
-*/
+
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return businesses.count
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+
         var cell = self.tableView.dequeueReusableCellWithIdentifier("BusinessListingCell") as BusinessListingTableViewCell
 
         var business = businesses[indexPath.row]
@@ -96,5 +89,43 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.categoryLabel.text = ", ".join(categoriesLabels)
 
         return cell
+    }
+
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+    }
+
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        if searchBar.text != query {
+            query = searchBar.text
+            offset = 0
+            businesses = []
+            tableView.reloadData()
+            fetchBusinessListing()
+        }
+    }
+
+    func fetchBusinessListing() {
+        MMProgressHUD.showWithStatus("Loading...")
+
+        client.search(query, offset: offset) {
+            (response: AnyObject!, error: NSError!) -> Void in
+
+            MMProgressHUD.dismiss()
+
+            if error == nil {
+                var object = response as NSDictionary
+                self.businesses = object["businesses"] as [NSDictionary]
+                self.tableView.reloadData()
+            } else {
+                // TODO: handle error correctly in the UI...
+                println(error)
+            }
+        }
     }
 }

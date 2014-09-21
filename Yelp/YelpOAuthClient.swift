@@ -21,8 +21,8 @@ class YelpOAuthClient: BDBOAuth1RequestOperationManager {
         super.init(coder: aDecoder)
     }
 
-    func search(query: String, callback: (response: AnyObject!, error: NSError!) -> Void) -> AFHTTPRequestOperation {
-        var parameters = ["term": query, "location": "San Jose"]
+    func search(query: String, offset: Int, callback: (response: AnyObject!, error: NSError!) -> Void) -> AFHTTPRequestOperation {
+        var parameters = ["term": query, "location": "San Jose", "offset": offset]
 
         return self.GET("search", parameters: parameters, success: {
             // Success

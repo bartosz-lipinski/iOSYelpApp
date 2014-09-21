@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="zw5-xS-IIg">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Main View Controller-->
@@ -58,13 +59,14 @@
                                     <outlet property="reviewCountLabel" destination="fba-am-eJX" id="Htv-eu-Rl0"/>
                                     <outlet property="starRatingImageView" destination="f6B-rf-5s2" id="KKx-Vr-ITy"/>
                                     <outlet property="thumbnailImageView" destination="X1h-MI-SEr" id="OJy-Mw-TJY"/>
+                                    <segue destination="1w7-kS-vSi" kind="push" id="zfO-ny-rdV"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="dom-FP-qdT">
-                        <barButtonItem key="rightBarButtonItem" image="filter icon" id="MJ8-zL-aFS">
+                        <barButtonItem key="leftBarButtonItem" image="filter icon" id="MJ8-zL-aFS">
                             <inset key="imageInsets" minX="1" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -75,12 +77,11 @@
                     <connections>
                         <outlet property="filterBtn" destination="MJ8-zL-aFS" id="1NA-dp-z9m"/>
                         <outlet property="searchBar" destination="wsD-7Z-rcV" id="vyu-cP-Xx1"/>
-                        <outlet property="searchDisplayController" destination="jEN-hQ-geG" id="leC-qO-JSp"/>
                         <outlet property="tableView" destination="FJi-Rr-eHw" id="czK-HY-McE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
-                <searchBar contentMode="redraw" id="wsD-7Z-rcV">
+                <searchBar contentMode="redraw" placeholder="Search" showsCancelButton="YES" id="wsD-7Z-rcV">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <textInputTraits key="textInputTraits"/>
@@ -88,22 +89,13 @@
                         <outlet property="delegate" destination="vXZ-lx-hvc" id="fBV-aK-d7G"/>
                     </connections>
                 </searchBar>
-                <searchDisplayController id="jEN-hQ-geG">
-                    <connections>
-                        <outlet property="delegate" destination="vXZ-lx-hvc" id="BDF-JX-yUg"/>
-                        <outlet property="searchBar" destination="wsD-7Z-rcV" id="MOx-tH-M7N"/>
-                        <outlet property="searchContentsController" destination="vXZ-lx-hvc" id="GyF-DG-j0q"/>
-                        <outlet property="searchResultsDataSource" destination="vXZ-lx-hvc" id="spx-45-36F"/>
-                        <outlet property="searchResultsDelegate" destination="vXZ-lx-hvc" id="7tc-Ju-XXJ"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="576" y="361"/>
         </scene>
-        <!--View Controller-->
+        <!--Filter-->
         <scene sceneID="PaE-Yk-1hu">
             <objects>
-                <viewController id="yVE-YC-usS" sceneMemberID="viewController">
+                <viewController title="Filter" id="yVE-YC-usS" customClass="FilterViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3cz-KZ-h6y"/>
                         <viewControllerLayoutGuide type="bottom" id="tNR-Kv-Dt8"/>
@@ -111,13 +103,81 @@
                     <view key="view" contentMode="scaleToFill" id="ny0-ou-yEk">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Most Popular" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1st-wa-1Vn">
+                                <rect key="frame" x="16" y="72" width="288" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ssb-0S-iT7">
+                                <rect key="frame" x="16" y="100" width="288" height="210"/>
+                                <subviews>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="STG-lz-EGb">
+                                        <rect key="frame" x="231" y="8" width="51" height="31"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="49" id="6ee-p7-pqO"/>
+                                            <constraint firstAttribute="height" constant="31" id="8K5-jx-9vk"/>
+                                        </constraints>
+                                    </switch>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open now" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sqd-T5-KEc">
+                                        <rect key="frame" x="8" y="13" width="215" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="qHc-Gb-1Fn"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="STG-lz-EGb" firstAttribute="leading" secondItem="sqd-T5-KEc" secondAttribute="trailing" constant="8" id="E2n-4o-IL3"/>
+                                    <constraint firstAttribute="trailing" secondItem="STG-lz-EGb" secondAttribute="trailing" constant="8" id="az2-fZ-p91"/>
+                                    <constraint firstItem="STG-lz-EGb" firstAttribute="top" secondItem="ssb-0S-iT7" secondAttribute="top" constant="8" id="bD6-pN-GNh"/>
+                                    <constraint firstItem="sqd-T5-KEc" firstAttribute="leading" secondItem="ssb-0S-iT7" secondAttribute="leading" constant="8" id="fPV-w1-g6f"/>
+                                    <constraint firstItem="sqd-T5-KEc" firstAttribute="top" secondItem="ssb-0S-iT7" secondAttribute="top" constant="13" id="lxo-Yz-XWM"/>
+                                    <constraint firstAttribute="height" constant="210" id="uBJ-G4-V9h"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="ssb-0S-iT7" firstAttribute="top" secondItem="1st-wa-1Vn" secondAttribute="bottom" constant="8" id="2Ty-p2-BfB"/>
+                            <constraint firstItem="1st-wa-1Vn" firstAttribute="leading" secondItem="ny0-ou-yEk" secondAttribute="leadingMargin" id="5es-5D-4Gc"/>
+                            <constraint firstItem="1st-wa-1Vn" firstAttribute="top" secondItem="3cz-KZ-h6y" secondAttribute="bottom" constant="8" id="89K-kG-lPL"/>
+                            <constraint firstItem="1st-wa-1Vn" firstAttribute="trailing" secondItem="ny0-ou-yEk" secondAttribute="trailingMargin" id="dDe-77-gJK"/>
+                            <constraint firstItem="ssb-0S-iT7" firstAttribute="leading" secondItem="ny0-ou-yEk" secondAttribute="leadingMargin" id="ff8-sW-Exm"/>
+                            <constraint firstItem="ssb-0S-iT7" firstAttribute="trailing" secondItem="ny0-ou-yEk" secondAttribute="trailingMargin" id="qq6-IN-6Pb"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="IAg-Ut-DzP"/>
+                    <connections>
+                        <outlet property="filterContainer" destination="ssb-0S-iT7" id="woM-pC-uS7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="igh-nU-u4a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="988" y="361"/>
+            <point key="canvasLocation" x="1014" y="362"/>
+        </scene>
+        <!--Details-->
+        <scene sceneID="vwr-DQ-bBq">
+            <objects>
+                <viewController title="Details" id="1w7-kS-vSi" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="yno-Lc-lkO"/>
+                        <viewControllerLayoutGuide type="bottom" id="g82-sK-n4i"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="CaQ-pe-z3x">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="bdh-ve-xfx"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pKv-Ya-hPj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="576" y="1049"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="iup-BL-X7u">
@@ -137,7 +197,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hwp-1Z-fTm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="160" y="361"/>
+            <point key="canvasLocation" x="128" y="361"/>
         </scene>
     </scenes>
     <resources>
