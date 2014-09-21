@@ -17,6 +17,8 @@ class BusinessListingTableViewCell: UITableViewCell {
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
 
+    var businessId = ""
+
     override func awakeFromNib() {
         super.awakeFromNib()
     }

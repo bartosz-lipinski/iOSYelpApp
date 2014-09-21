@@ -21,8 +21,14 @@ class YelpOAuthClient: BDBOAuth1RequestOperationManager {
         super.init(coder: aDecoder)
     }
 
-    func search(query: String, offset: Int, callback: (response: AnyObject!, error: NSError!) -> Void) -> AFHTTPRequestOperation {
-        var parameters = ["term": query, "location": "San Jose", "offset": offset]
+    func search(query: String, limit: Int, offset: Int, callback: (response: AnyObject!, error: NSError!) -> Void) -> AFHTTPRequestOperation {
+
+        var parameters = [
+            "term": query,
+            "location": "San Jose",
+            "offset": offset,
+            "limit": limit
+        ]
 
         return self.GET("search", parameters: parameters, success: {
             // Success
@@ -33,5 +39,39 @@ class YelpOAuthClient: BDBOAuth1RequestOperationManager {
             (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
             callback(response: nil, error: error)
         })
+    }
+
+    func getBusinessDetail(businessId: String, callback: (response: AnyObject!, error: NSError!) -> Void) -> AFHTTPRequestOperation {
+
+        return self.GET("business/\(businessId)", parameters: nil, success: {
+            // Success
+            (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+            callback(response: response, error: nil)
+        }, failure: {
+            // Failure
+            (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            callback(response: nil, error: error)
+        })
+    }
+
+    // Singleton stuff...
+
+    class var sharedInstance: YelpOAuthClient {
+
+        struct Static {
+            static var instance: YelpOAuthClient?
+            static var token: dispatch_once_t = 0
+        }
+
+        dispatch_once(&Static.token) {
+            Static.instance = YelpOAuthClient(
+                consumerKey:    "wVsoVMepFyxQU7pM2ZGVXg",
+                consumerSecret: "3SdHfo8tTAKW3EYYHoUz4nCbgyM",
+                accessToken:    "6nlqBaBh87XC9rV606vGnpQzuaH1VzQi",
+                accessSecret:   "YbzRsj464YqRPCzStY2gpnOPOVQ"
+            )
+        }
+
+        return Static.instance!
     }
 }
