@@ -1,11 +1,12 @@
 iOS Yelp App
 ============
 
-Total time to complete assignment: 10 hours
+Total time to complete assignment: 12 hours
 
 Implemented User Stories
 ------------------------
 
+* Customized app icon and launch screen
 * Display search bar in navigation bar
 * Display Yelp search results in a table view and implement infinite scroll
 * Local business detail page
@@ -14,8 +15,7 @@ Implemented User Stories
 Non-implemented User Stories
 ----------------------------
 
-* I did not implement all the filters in the UI
-* I did not figure out how to pass data back to the main view controller
+* I did not implement the category filter in the search settings page
 
 Screen Capture
 --------------
