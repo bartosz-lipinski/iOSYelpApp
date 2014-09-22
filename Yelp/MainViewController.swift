@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchBarDelegate {
+class MainViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchBarDelegate, YelpSearchSettingsDelegate {
 
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet weak var filterBtn: UIBarButtonItem!
@@ -21,11 +21,9 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     var offset = 0
     let n = 20
 
-    var settings = [
-        "open_now": false,
-        "offering_deal": false,
-        "sort_by": 0
-    ]
+    var settings = YelpSearchSettings(radius: 10, sortBy: 0, deals: false)
+
+    var searching = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,54 +49,70 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return businesses.count
+        return businesses.count + 1
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
-        var cell = self.tableView.dequeueReusableCellWithIdentifier("BusinessListingCell") as BusinessListingTableViewCell
+        if (indexPath.row == businesses.count) {
 
-        var business = businesses[indexPath.row]
+            var cell = UITableViewCell()
+            if businesses.count == 0 {
+                if query != "" && !searching {
+                    cell.textLabel?.text = "No results..."
+                }
+            } else {
+                cell.textLabel?.text = "Loading..."
+            }
 
-        var thumbnailImageUrl = business["image_url"] as String
-        cell.thumbnailImageView.setImageWithURL(NSURL(string: thumbnailImageUrl))
+            return cell
 
-        var ratingImageUrl = business["rating_img_url_large"] as String
-        cell.starRatingImageView.setImageWithURL(NSURL(string: ratingImageUrl))
+        } else {
 
-        cell.businessNameLabel.text = business["name"] as? String
+            var cell = tableView.dequeueReusableCellWithIdentifier("BusinessListingCell") as BusinessListingTableViewCell
 
-        var reviewCount = business["review_count"] as Int
-        cell.reviewCountLabel.text = "\(reviewCount) reviews"
+            var business = businesses[indexPath.row]
 
-        var location = business["location"] as NSDictionary
-        var addressParts = location["address"] as [String]
-        var address = " ".join(addressParts)
-        var city = location["city"] as String
-        cell.addressLabel.text = "\(address), \(city)"
+            var thumbnailImageUrl = business["image_url"] as String
+            cell.thumbnailImageView.setImageWithURL(NSURL(string: thumbnailImageUrl))
 
-        var categories = business["categories"] as [NSArray]
+            var ratingImageUrl = business["rating_img_url_large"] as String
+            cell.starRatingImageView.setImageWithURL(NSURL(string: ratingImageUrl))
 
-        var categoriesLabels: [String] = categories.reduce([]) {
-            var currentValue = $0 as [String]
-            var category = $1 as [String]
-            var label = category[0]
-            currentValue.append(label)
-            return currentValue
+            cell.businessNameLabel.text = business["name"] as? String
+
+            var reviewCount = business["review_count"] as Int
+            cell.reviewCountLabel.text = "\(reviewCount) reviews"
+
+            var location = business["location"] as NSDictionary
+            var addressParts = location["address"] as [String]
+            var address = " ".join(addressParts)
+            var city = location["city"] as String
+            cell.addressLabel.text = "\(address), \(city)"
+
+            var categories = business["categories"] as [NSArray]
+
+            var categoriesLabels: [String] = categories.reduce([]) {
+                var currentValue = $0 as [String]
+                var category = $1 as [String]
+                var label = category[0]
+                currentValue.append(label)
+                return currentValue
+            }
+
+            cell.categoryLabel.text = ", ".join(categoriesLabels)
+
+            // Additional data used for segue...
+            cell.businessId = business["id"] as String
+
+            // Infinite scrolling...
+            if indexPath.row >= businesses.count - 1 && offset < businesses.count {
+                offset += n
+                fetchBusinessListing()
+            }
+
+            return cell
         }
-
-        cell.categoryLabel.text = ", ".join(categoriesLabels)
-
-        // Additional data used for segue...
-        cell.businessId = business["id"] as String
-
-        // Infinite scrolling...
-        if indexPath.row >= businesses.count - 1 && offset < businesses.count {
-            offset += n
-            fetchBusinessListing()
-        }
-
-        return cell
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -123,10 +137,16 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
 
     func fetchBusinessListing() {
-        MMProgressHUD.showWithStatus("Loading...")
+        if offset == 0 {
+            MMProgressHUD.showWithStatus("Loading...")
+        }
 
-        client.search(query, limit: n, offset: offset) {
+        searching = true
+
+        client.search(query, limit: n, offset: offset, settings: settings) {
             (response: AnyObject!, error: NSError!) -> Void in
+
+            self.searching = false
 
             MMProgressHUD.dismiss()
 
@@ -154,8 +174,24 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
             var detailViewController = segue.destinationViewController as DetailViewController
             detailViewController.businessId = cell.businessId
         } else if segue.identifier == "Settings" {
-            // TODO
+            var settingsViewController = segue.destinationViewController as SettingsViewController
+            settingsViewController.delegate = self
         }
     }
 
+    func getCurrentSearchSettings() -> YelpSearchSettings {
+        return settings
+    }
+
+    func applyYelpSearchSettings(settings: YelpSearchSettings) {
+        self.settings = settings
+
+        // Repeat the current search with the new settings...
+        if query != "" {
+            offset = 0
+            businesses = []
+            tableView.reloadData()
+            fetchBusinessListing()
+        }
+    }
 }
